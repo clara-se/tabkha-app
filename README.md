@@ -19,9 +19,20 @@ Milestone 1: project scaffold. The server and the client both start, and the wir
 
 ## How to run it
 
-Use two terminals, one for each side.
+**1. Get the project**
 
-**Terminal 1: the server**
+Clone the repository, then go into its folder:
+
+```
+git clone https://github.com/clara-se/tabkha-app.git
+cd tabkha-app
+```
+
+You are now in the main folder, the one that contains `client` and `server`. Both terminals below must start from this folder.
+
+**2. Terminal 1: the server**
+
+From the main `tabkha-app` folder:
 
 ```
 cd server
@@ -31,7 +42,9 @@ npm run dev
 
 You should see `Listening on http://localhost:3000`. Opening that address in a browser shows `{"status":"ok"}`.
 
-**Terminal 2: the client**
+**3. Terminal 2: the client**
+
+Open a second terminal. Make sure it is in the main `tabkha-app` folder, not inside `server` (if it is, run `cd ..` first). Then:
 
 ```
 cd client

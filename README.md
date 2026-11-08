@@ -8,6 +8,8 @@ Team: Clara Seif, Georges Saab, Karam Said
 
 Milestone 1: project scaffold. The server and the client both start, and the wireframes and database schema are being finalized.
 
+Milestone 1 (wireframes and schema): see docs/milestone-1.pdf
+
 ## What you need
 
 - Node.js version 20 or later (check with `node -v`)

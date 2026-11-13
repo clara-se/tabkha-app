@@ -59,3 +59,4 @@ Audit of the Express + MongoDB API against the seven holes in Session 21 ("Secur
 - **Attack:** save a recipe titled `<img src=x onerror=alert(1)>`.
 - **Result:** it is stored and returned as plain text in JSON. The API never renders HTML, so nothing runs.
 - **Rule for Milestone 3:** the React client must display recipe text as text only and never use `dangerouslySetInnerHTML`. The token is sent as a Bearer header, so it is kept in the browser and an XSS bug could read it. That is a reason to keep the rule above.
+- **Image links:** the recipe `imageUrl` is shown in an `<img src>`. The server only accepts an empty value or a link starting with `http://` or `https://`, so values like `javascript:` are rejected with 400.

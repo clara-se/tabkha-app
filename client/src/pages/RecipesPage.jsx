@@ -4,6 +4,28 @@ import { apiFetch } from '../api/client.js';
 import RecipeForm from '../components/RecipeForm.jsx';
 import CookCheck from '../components/CookCheck.jsx';
 
+function RecipeImage({ url, title, eager }) {
+  const [failed, setFailed] = useState(false);
+  if (!url || failed) {
+    return (
+      <div className="recipe-img placeholder" aria-hidden="true">
+        <span lang="ar">طبخة</span>
+      </div>
+    );
+  }
+  return (
+    <img
+      className="recipe-img"
+      src={url}
+      alt={`Photo of ${title}`}
+      width="400"
+      height="200"
+      loading={eager ? 'eager' : 'lazy'}
+      onError={() => setFailed(true)}
+    />
+  );
+}
+
 export default function RecipesPage() {
   const [query, setQuery] = useState('');
   const [adding, setAdding] = useState(false);
@@ -65,7 +87,7 @@ export default function RecipesPage() {
 
       {recipes.length === 0 && <p className="empty">No recipes yet.</p>}
       <ul className="cards">
-        {recipes.map((r) => (
+        {recipes.map((r, idx) => (
           <li
             key={r._id}
             className={editingId === r._id ? 'card editing' : 'card'}
@@ -78,6 +100,7 @@ export default function RecipesPage() {
               />
             ) : (
               <>
+                <RecipeImage url={r.imageUrl} title={r.title} eager={idx < 3} />
                 <h2>{r.title}</h2>
                 <ul className="ingredients">
                   {r.ingredients.map((ing, i) => (

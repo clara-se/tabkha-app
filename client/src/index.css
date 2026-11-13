@@ -57,7 +57,8 @@ nav {
   border-bottom: 1px solid var(--line);
   flex-wrap: wrap;
 }
-nav a { font-weight: 600; text-decoration: none; }
+nav a { font-weight: 600; text-decoration: none; color: var(--text); }
+nav a:hover { color: var(--brand); }
 nav button { margin-left: auto; }
 
 main {
@@ -265,4 +266,23 @@ button.danger:hover { color: var(--surface); background: var(--danger); }
 
 @media (min-width: 768px) {
   .pantry-name { flex: 1 1 auto; }
+}
+
+/* recipe pictures */
+.recipe-img {
+  display: block;
+  width: calc(100% + 2 * var(--sp-4));
+  height: 200px;
+  margin: calc(-1 * var(--sp-4)) calc(-1 * var(--sp-4)) var(--sp-3);
+  object-fit: cover;
+  border-radius: calc(var(--radius) - 1px) calc(var(--radius) - 1px) 0 0;
+}
+.recipe-img.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface);
+  color: var(--muted);
+  font-family: var(--arabic);
+  font-size: 2.5rem;
 }

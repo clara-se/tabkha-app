@@ -16,6 +16,10 @@ const Ingredient = z.object({
 const RecipeInput = z.object({
   title: z.string().trim().min(1).max(120),
   sourceUrl: z.string().trim().max(500).optional(),
+  imageUrl: z.string().trim().max(500)
+    .refine((v) => v === '' || /^https?:\/\//i.test(v),
+      'Image link must start with http:// or https://')
+    .optional(),
   ingredients: z.array(Ingredient).max(100).optional(),
   steps: z.string().max(10000).optional(),
   tags: z.array(z.string().max(30)).max(10).optional(),

@@ -5,6 +5,7 @@ const emptyRow = { name: '', quantity: '', unit: 'g' };
 
 export default function RecipeForm({ initial, onSubmit, onCancel }) {
   const [title, setTitle] = useState(initial?.title ?? '');
+  const [imageUrl, setImageUrl] = useState(initial?.imageUrl ?? '');
   const [steps, setSteps] = useState(initial?.steps ?? '');
   const [tags, setTags] = useState((initial?.tags ?? []).join(', '));
   const [rows, setRows] = useState(
@@ -27,6 +28,7 @@ export default function RecipeForm({ initial, onSubmit, onCancel }) {
     setError('');
     const body = {
       title,
+      imageUrl: imageUrl.trim(),
       steps,
       tags: tags.split(',').map((t) => t.trim()).filter(Boolean),
       ingredients: rows
@@ -53,6 +55,12 @@ export default function RecipeForm({ initial, onSubmit, onCancel }) {
         aria-label="Recipe title"
         maxLength={120}
         required
+      />
+      <input
+        value={imageUrl}
+        onChange={(e) => setImageUrl(e.target.value)}
+        placeholder="Picture link (optional, starts with https://)"
+        aria-label="Picture link"
       />
       <h3>Ingredients</h3>
       {rows.map((r, i) => (

@@ -16,6 +16,7 @@ it('calls onSubmit with the typed title', async () => {
   await userEvent.click(screen.getByRole('button', { name: /save/i }));
   expect(onSubmit).toHaveBeenCalledWith({
     title: 'Soup',
+    imageUrl: '',
     steps: '',
     tags: [],
     ingredients: [],

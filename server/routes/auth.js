@@ -2,10 +2,21 @@ import express from 'express';
 import bcrypt from 'bcrypt';
 import { User } from '../models/User.js';
 import { signToken } from '../auth/token.js';
+import { z } from 'zod';
+import { validate } from '../middleware/validate.js';
 
 const authRouter = express.Router();
 
-authRouter.post('/signup', async (req, res) => {
+const SignupInput = z.object({
+  email: z.string().trim().min(1).max(200),
+  password: z.string().min(8, 'Password must be 8+ characters').max(200),
+});
+const LoginInput = z.object({
+  email: z.string().trim().min(1).max(200),
+  password: z.string().min(1).max(200),
+});
+
+authRouter.post('/signup', validate(SignupInput), async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password || password.length < 8) {
     return res.status(400).json({ error: 'Email and 8+ char password' });
@@ -21,7 +32,7 @@ authRouter.post('/signup', async (req, res) => {
   });
 });
 
-authRouter.post('/login', async (req, res) => {
+authRouter.post('/login', validate(LoginInput), async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   const ok = user &&

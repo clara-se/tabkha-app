@@ -1,29 +1,23 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import { PantryItem } from '../models/PantryItem.js';
+import { z } from 'zod';
+import { validate } from '../middleware/validate.js';
 
 const pantryRouter = express.Router();
 const UNITS = ['g', 'kg', 'ml', 'l', 'piece', 'tbsp', 'tsp'];
 
-function checkAmount(req, res, next) {
-  const { quantity, unit } = req.body;
-  const badQuantity = quantity !== undefined && !(quantity > 0);
-  const badUnit = unit !== undefined && !UNITS.includes(unit);
-  if (badQuantity || badUnit) {
-    return res.status(400).json({
-      error: 'quantity must be above 0 and unit one of: '
-        + UNITS.join(', '),
-    });
-  }
-  next();
-}
-
+const PantryInput = z.object({
+  name: z.string().trim().min(1).max(100),
+  quantity: z.number().positive(),
+  unit: z.enum(UNITS),
+});
 pantryRouter.get('/', async (req, res) => {
   res.json(await PantryItem.find({ userId: req.userId })
     .sort({ name: 1 }));
 });
 
-pantryRouter.post('/', checkAmount, async (req, res) => {
+pantryRouter.post('/', validate(PantryInput), async (req, res) => {
   try {
     const data = { ...req.body, userId: req.userId };
     res.status(201).json(await PantryItem.create(data));
@@ -32,7 +26,7 @@ pantryRouter.post('/', checkAmount, async (req, res) => {
   }
 });
 
-pantryRouter.patch('/:id', checkAmount, async (req, res) => {
+pantryRouter.patch('/:id', validate(PantryInput.partial()), async (req, res) => {
   const { id } = req.params;
   if (!mongoose.isValidObjectId(id)) {
     return res.status(400).json({ error: 'Invalid id' });

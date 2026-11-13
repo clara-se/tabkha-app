@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import { Recipe } from '../models/Recipe.js';
 import { z } from 'zod';
 import { validate } from '../middleware/validate.js';
+import { PantryItem } from '../models/PantryItem.js';
 
 const recipesRouter = express.Router();
 const UNITS = ['g', 'kg', 'ml', 'l', 'piece', 'tbsp', 'tsp'];
@@ -39,6 +40,45 @@ recipesRouter.get('/:id', async (req, res) => {
   const recipe = await Recipe.findOne({ _id: id, userId: req.userId });
   if (!recipe) return res.status(404).json({ error: 'Recipe not found' });
   res.json(recipe);
+});
+
+recipesRouter.get('/:id/cook', async (req, res) => {
+  const { id } = req.params;
+  if (!mongoose.isValidObjectId(id)) {
+    return res.status(400).json({ error: 'Invalid id' });
+  }
+  const recipe = await Recipe.findOne({ _id: id, userId: req.userId });
+  if (!recipe) return res.status(404).json({ error: 'Recipe not found' });
+
+  const pantry = await PantryItem.find({ userId: req.userId });
+  const norm = (s) => s.trim().toLowerCase();
+
+  const ingredients = recipe.ingredients.map((ing) => {
+    const matches = pantry.filter((p) => norm(p.name) === norm(ing.name));
+    const sameUnit = matches.filter((p) => p.unit === ing.unit);
+    let status;
+    let have = 0;
+    if (matches.length === 0) {
+      status = 'missing';
+    } else if (sameUnit.length === 0) {
+      status = 'check units';
+    } else {
+      have = sameUnit.reduce((sum, p) => sum + p.quantity, 0);
+      status = have >= ing.quantity ? 'enough' : 'not enough';
+    }
+    return {
+      name: ing.name,
+      needed: ing.quantity,
+      unit: ing.unit,
+      have,
+      status,
+      pantry: matches.map((p) => `${p.quantity} ${p.unit}`),
+    };
+  });
+
+  const canCook =
+    ingredients.length > 0 && ingredients.every((i) => i.status === 'enough');
+  res.json({ canCook, ingredients });
 });
 
 recipesRouter.post('/', validate(RecipeInput), async (req, res) => {

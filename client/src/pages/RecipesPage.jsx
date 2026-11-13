@@ -36,27 +36,40 @@ export default function RecipesPage() {
     setQuery(new FormData(e.target).get('search').trim());
   }
 
-  if (loading) return <p>Loading…</p>;
-  if (error) return <p role="alert">{error.message}</p>;
+  if (loading) return <main><p>Loading…</p></main>;
+  if (error) return <main><p role="alert">{error.message}</p></main>;
 
   return (
     <main>
-      <h1>My recipes</h1>
-      <form onSubmit={handleSearch}>
-        <input name="search" placeholder="Search by title" />
+      <div className="page-head">
+        <h1>My recipes</h1>
+        {!adding && (
+          <button className="primary" onClick={() => setAdding(true)}>
+            Add recipe
+          </button>
+        )}
+      </div>
+
+      <form className="inline-form" onSubmit={handleSearch}>
+        <input name="search" placeholder="Search by title"
+          aria-label="Search recipes" />
         <button>Search</button>
       </form>
 
-      {adding ? (
-        <RecipeForm onSubmit={addRecipe} onCancel={() => setAdding(false)} />
-      ) : (
-        <button onClick={() => setAdding(true)}>Add recipe</button>
+      {adding && (
+        <div className="card new-recipe">
+          <h2>New recipe</h2>
+          <RecipeForm onSubmit={addRecipe} onCancel={() => setAdding(false)} />
+        </div>
       )}
 
-      {recipes.length === 0 && <p>No recipes yet.</p>}
-      <ul>
+      {recipes.length === 0 && <p className="empty">No recipes yet.</p>}
+      <ul className="cards">
         {recipes.map((r) => (
-          <li key={r._id}>
+          <li
+            key={r._id}
+            className={editingId === r._id ? 'card editing' : 'card'}
+          >
             {editingId === r._id ? (
               <RecipeForm
                 initial={r}
@@ -66,18 +79,28 @@ export default function RecipesPage() {
             ) : (
               <>
                 <h2>{r.title}</h2>
-                <ul>
+                <ul className="ingredients">
                   {r.ingredients.map((ing, i) => (
                     <li key={i}>
-                      {ing.name}: {ing.quantity} {ing.unit}
+                      <span>{ing.name}</span>
+                      <span className="qty">{ing.quantity} {ing.unit}</span>
                     </li>
                   ))}
                 </ul>
-                {r.steps && <p>{r.steps}</p>}
-                {r.tags.length > 0 && <p>Tags: {r.tags.join(', ')}</p>}
+                {r.steps && <p className="steps">{r.steps}</p>}
+                {r.tags.length > 0 && (
+                  <ul className="tags">
+                    {r.tags.map((t, i) => (
+                      <li key={i} className="tag">{t}</li>
+                    ))}
+                  </ul>
+                )}
                 <CookCheck recipeId={r._id} />
-                <button onClick={() => setEditingId(r._id)}>Edit</button>
-                <button onClick={() => deleteRecipe(r._id)}>Delete</button>
+                <div className="actions">
+                  <button onClick={() => setEditingId(r._id)}>Edit</button>
+                  <button className="danger"
+                    onClick={() => deleteRecipe(r._id)}>Delete</button>
+                </div>
               </>
             )}
           </li>

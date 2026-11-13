@@ -21,18 +21,35 @@ export default function LoginPage() {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h1>{mode === 'login' ? 'Log in' : 'Sign up'}</h1>
-      <input name="email" type="email" placeholder="Email" required />
-      <input name="password" type="password" placeholder="Password"
-        minLength={8} required />
-      {error && <p role="alert">{error}</p>}
-      <button>{mode === 'login' ? 'Log in' : 'Create account'}</button>
-      <p>
-        <button type="button" onClick={() => { setError(''); setMode(mode === 'login' ? 'signup' : 'login'); }}>
-          {mode === 'login' ? 'No account? Sign up' : 'Have an account? Log in'}
-        </button>
-      </p>
-    </form>
+    <main className="auth">
+      <div className="brand">
+        <h1 className="brand-name">
+          Tabkha <span lang="ar">طبخة</span>
+        </h1>
+        <p className="tagline">
+          What can I cook tonight, from what's in my kitchen?
+        </p>
+      </div>
+
+      <form className="card auth-form" onSubmit={handleSubmit}>
+        <h2>{mode === 'login' ? 'Log in' : 'Sign up'}</h2>
+        <input name="email" type="email" placeholder="Email" required />
+        <input name="password" type="password" placeholder="Password"
+          minLength={8} required />
+        {error && <p role="alert">{error}</p>}
+        <button>{mode === 'login' ? 'Log in' : 'Create account'}</button>
+      </form>
+
+      <button
+        type="button"
+        className="link-button"
+        onClick={() => {
+          setError('');
+          setMode(mode === 'login' ? 'signup' : 'login');
+        }}
+      >
+        {mode === 'login' ? 'No account? Sign up' : 'Have an account? Log in'}
+      </button>
+    </main>
   );
 }

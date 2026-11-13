@@ -15,7 +15,11 @@ export default function App() {
     <>
       {token && (
         <nav>
-          <Link to="/">Recipes</Link> <Link to="/pantry">Pantry</Link>{' '}
+          <Link to="/" className="nav-brand">
+            Tabkha <span lang="ar">طبخة</span>
+          </Link>
+          <Link to="/">Recipes</Link>
+          <Link to="/pantry">Pantry</Link>
           <button onClick={logout}>Log out</button>
         </nav>
       )}

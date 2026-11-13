@@ -25,4 +25,6 @@ const recipeSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+recipeSchema.index({ userId: 1, createdAt: -1 });
+
 export const Recipe = mongoose.model('Recipe', recipeSchema);

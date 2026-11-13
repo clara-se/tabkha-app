@@ -45,21 +45,23 @@ export default function RecipeForm({ initial, onSubmit, onCancel }) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="stack" onSubmit={handleSubmit}>
       <input
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         placeholder="Title"
+        aria-label="Recipe title"
         maxLength={120}
         required
       />
       <h3>Ingredients</h3>
       {rows.map((r, i) => (
-        <div key={i}>
+        <div className="row" key={i}>
           <input
             value={r.name}
             onChange={(e) => updateRow(i, 'name', e.target.value)}
             placeholder="Name"
+            aria-label="Ingredient name"
           />
           <input
             type="number"
@@ -68,10 +70,12 @@ export default function RecipeForm({ initial, onSubmit, onCancel }) {
             value={r.quantity}
             onChange={(e) => updateRow(i, 'quantity', e.target.value)}
             placeholder="Quantity"
+            aria-label="Ingredient quantity"
           />
           <select
             value={r.unit}
             onChange={(e) => updateRow(i, 'unit', e.target.value)}
+            aria-label="Ingredient unit"
           >
             {UNITS.map((u) => (
               <option key={u}>{u}</option>
@@ -80,20 +84,27 @@ export default function RecipeForm({ initial, onSubmit, onCancel }) {
           <button type="button" onClick={() => removeRow(i)}>Remove</button>
         </div>
       ))}
-      <button type="button" onClick={addRow}>Add ingredient</button>
+      <div>
+        <button type="button" onClick={addRow}>Add ingredient</button>
+      </div>
       <textarea
         value={steps}
         onChange={(e) => setSteps(e.target.value)}
         placeholder="Steps"
+        aria-label="Steps"
+        rows={4}
       />
       <input
         value={tags}
         onChange={(e) => setTags(e.target.value)}
         placeholder="Tags, separated by commas"
+        aria-label="Tags"
       />
       {error && <p role="alert">{error}</p>}
-      <button>Save</button>
-      {onCancel && <button type="button" onClick={onCancel}>Cancel</button>}
+      <div className="actions">
+        <button>Save</button>
+        {onCancel && <button type="button" onClick={onCancel}>Cancel</button>}
+      </div>
     </form>
   );
 }

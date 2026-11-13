@@ -14,4 +14,6 @@ const pantryItemSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+pantryItemSchema.index({ userId: 1, name: 1 });
+
 export const PantryItem = mongoose.model('PantryItem', pantryItemSchema);

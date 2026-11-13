@@ -26,23 +26,28 @@ function PantryRow({ item, onChange }) {
   }
 
   return (
-    <li>
-      {item.name}{' '}
+    <li className="card pantry-row">
+      <strong className="pantry-name">{item.name}</strong>
       <input
         type="number"
         min="0"
         step="any"
         value={quantity}
         onChange={(e) => setQuantity(e.target.value)}
-      />{' '}
-      <select value={unit} onChange={(e) => setUnit(e.target.value)}>
+        aria-label={`Quantity of ${item.name}`}
+      />
+      <select
+        value={unit}
+        onChange={(e) => setUnit(e.target.value)}
+        aria-label={`Unit of ${item.name}`}
+      >
         {UNITS.map((u) => (
           <option key={u}>{u}</option>
         ))}
-      </select>{' '}
+      </select>
       <button onClick={save}>Update</button>
-      <button onClick={remove}>Delete</button>
-      {error && <span role="alert"> {error}</span>}
+      <button className="danger" onClick={remove}>Delete</button>
+      {error && <span role="alert">{error}</span>}
     </li>
   );
 }
@@ -72,17 +77,19 @@ export default function PantryPage() {
     }
   }
 
-  if (loading) return <p>Loading…</p>;
-  if (error) return <p role="alert">{error.message}</p>;
+  if (loading) return <main><p>Loading…</p></main>;
+  if (error) return <main><p role="alert">{error.message}</p></main>;
 
   return (
     <main>
-      <h1>My pantry</h1>
-      <form onSubmit={addItem}>
-        <input name="name" placeholder="Item" required />
+      <div className="page-head">
+        <h1>My pantry</h1>
+      </div>
+      <form className="inline-form card" onSubmit={addItem}>
+        <input name="name" placeholder="Item" aria-label="Item name" required />
         <input name="quantity" type="number" min="0" step="any"
-          placeholder="Quantity" required />
-        <select name="unit">
+          placeholder="Quantity" aria-label="Quantity" required />
+        <select name="unit" aria-label="Unit">
           {UNITS.map((u) => (
             <option key={u}>{u}</option>
           ))}
@@ -90,8 +97,8 @@ export default function PantryPage() {
         <button>Add</button>
       </form>
       {formError && <p role="alert">{formError}</p>}
-      {items.length === 0 && <p>Your pantry is empty.</p>}
-      <ul>
+      {items.length === 0 && <p className="empty">Your pantry is empty.</p>}
+      <ul className="cards list">
         {items.map((item) => (
           <PantryRow key={item._id} item={item} onChange={reload} />
         ))}

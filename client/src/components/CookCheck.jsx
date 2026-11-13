@@ -26,21 +26,21 @@ export default function CookCheck({ recipeId }) {
   }
 
   return (
-    <div>
-      <button onClick={check} disabled={loading}>
+    <div className="cook">
+      <button className="primary" onClick={check} disabled={loading}>
         {loading ? 'Checking…' : 'Can I cook this?'}
       </button>
       {error && <p role="alert">{error}</p>}
       {result && (
         <>
-          <p>
+          <p className={result.canCook ? 'ok' : 'no'}>
             <strong>
               {result.canCook ? 'Yes, you have everything!' : 'Not yet.'}
             </strong>
           </p>
-          <ul>
+          <ul className="cook-list">
             {result.ingredients.map((i, idx) => (
-              <li key={idx}>
+              <li key={idx} className={i.status === 'enough' ? 'ok' : 'no'}>
                 {i.name}: need {i.needed} {i.unit}, {describe(i)}
               </li>
             ))}

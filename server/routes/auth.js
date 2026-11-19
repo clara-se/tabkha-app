@@ -18,9 +18,6 @@ const LoginInput = z.object({
 
 authRouter.post('/signup', validate(SignupInput), async (req, res) => {
   const { email, password } = req.body;
-  if (!email || !password || password.length < 8) {
-    return res.status(400).json({ error: 'Email and 8+ char password' });
-  }
   if (await User.findOne({ email })) {
     return res.status(409).json({ error: 'Email already registered' });
   }

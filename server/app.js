@@ -26,7 +26,7 @@ app.use('/api', apiLimiter);
 app.use('/api/auth/login', loginLimiter);
 
 app.get('/', (req, res) => { res.json({ status: 'ok' }); });
-
+app.get('/api/health', (req, res) => res.json({ ok: true }));
 // public
 app.use('/api/auth', authRouter);
 // locked

@@ -2,6 +2,13 @@
 
 Tabkha is a full-stack web app (React, Express, MongoDB) that helps home cooks keep their recipes in one place and see what they can cook from the ingredients they have. Capstone project for the Web Development course.
 
+## Live
+
+- Front end: https://tabkha-app.netlify.app
+- API: https://tabkha-app.onrender.com (health check: https://tabkha-app.onrender.com/api/health)
+
+The API runs on a free plan that goes to sleep when idle, so the first request after a pause can take 30 seconds or more.
+
 Team: Clara Seif, Georges Saab, Karam Said
 
 ## Status
@@ -9,7 +16,7 @@ Team: Clara Seif, Georges Saab, Karam Said
 - Milestone 1 (wireframes and schema): see docs/milestone-1.pdf
 - Milestone 2 (back end: auth and CRUD routes): done
 - Milestone 3 (React front end connected to the API): done
-- Milestone 4: runs locally, not deployed yet
+- Milestone 4: deployed (front end on Netlify, API on Render, database on MongoDB Atlas)
 
 ## Features
 
@@ -105,6 +112,12 @@ npm run preview -- --port 5173
 ```
 
 Use port 5173, because the server only allows the origin set in `CLIENT_ORIGIN`.
+
+## Deployment
+
+- **Database:** MongoDB Atlas (network access open to the host).
+- **API (Render):** root directory `server`, build command `npm ci`, start command `npm start`. Environment variables set in the Render dashboard: `MONGODB_URI`, `JWT_SECRET` (a new one for production), `CLIENT_ORIGIN` (the front-end address), `NODE_ENV=production`. Render provides `PORT`.
+- **Front end (Netlify):** base directory `client`, build command `npm run build`, publish directory `dist`, environment variable `VITE_API_URL` (the API address). `client/public/_redirects` sends every path to `index.html`, so refreshing a page does not return a 404.
 
 ## Tests
 
